@@ -56,6 +56,46 @@ let estatutoData = [{
   conteudo: '<p>Documento oficial que regulamenta os princípios, direitos e deveres dos associados da ASSGA.</p>'
 }];
 
+let historiaData = {
+  id: 1,
+  titulo: 'Nossa História',
+  subtitulo: 'Conheça a trajetória da ASSGA, desde sua fundação até os dias atuais.',
+  data: 'Fundada em 2019',
+  imagem: 'src/imagens/Assga_foto.jpg',
+  texto: 'A ASSGA - Associação Desportiva foi fundada em 2019 na cidade de São Gonçalo do Amarante - RN, com o objetivo de promover o esporte, a integração social e o bem-estar da comunidade. Um grupo de apaixonados por esportes se uniu para criar uma associação que pudesse oferecer atividades esportivas de qualidade para todas as idades.',
+  textoExtra: '<p><i class="fas fa-star" style="color:#ffd700;"></i> A ASSGA é feita de pessoas, histórias e conquistas. Cada passo é uma vitória!</p>',
+  itens: [
+    {
+      id: 1,
+      titulo: 'Fundação da ASSGA',
+      data: '2019',
+      texto: 'Início das atividades da Associação Desportiva ASSGA em São Gonçalo do Amarante - RN, unindo atletas, apoiadores e a comunidade.',
+      imagem: 'src/imagens/Assga_foto.jpg'
+    },
+    {
+      id: 2,
+      titulo: 'Primeiros Torneios e Campeonatos',
+      data: '2020 - 2021',
+      texto: 'Realização dos primeiros campeonatos com grande participação e entusiasmo da comunidade desportiva.',
+      imagem: 'src/imagens/foto1.jpg'
+    },
+    {
+      id: 3,
+      titulo: 'Expansão e Conquistas Esportivas',
+      data: '2022 - 2024',
+      texto: 'Crescimento contínuo, integração social e expansão de modalidades esportivas com destaque regional.',
+      imagem: 'src/imagens/foto2.jpg'
+    },
+    {
+      id: 4,
+      titulo: 'Presença Digital e Eventos Especiais',
+      data: '2026',
+      texto: 'Consolidação da presença digital, carteirinhas de sócios e realizações como o 2º Halloween ASSGA.',
+      imagem: 'src/imagens/foto3.jpg'
+    }
+  ]
+};
+
 let inscricoesData = [];
 
 // API Handler supporting both `?api=<action>` and `/api/<action>`
@@ -127,6 +167,13 @@ function handleApiAction(action, req, res) {
       } else {
         estatutoData.push({ id: 1, conteudo: item.conteudo });
       }
+      return res.json({ status: 'ok' });
+    }
+
+    case 'historia':
+      return res.json(historiaData);
+    case 'salvar_historia': {
+      historiaData = { ...historiaData, ...req.body };
       return res.json({ status: 'ok' });
     }
 

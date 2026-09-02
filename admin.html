@@ -297,32 +297,125 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- ABA HISTÓRIA - CORRIGIDA E FUNCIONAL -->
+        <!-- ABA HISTÓRIA - FOTO, TEXTO, DATA E MARCOS HISTÓRICOS -->
         <!-- ========================================================== -->
         <div id="tab-historia" class="tab-content">
             <div class="content-card">
-                <h2><i class="fas fa-book-open"></i> Conteúdo da História</h2>
+                <h2><i class="fas fa-book-open"></i> Conteúdo Principal da História</h2>
+                <p style="color:#666; margin-bottom:15px; font-size:0.95rem;">Configure a foto principal, data de destaque e o texto da história da ASSGA.</p>
                 <form id="historiaForm">
                     <div class="form-grid">
-                        <input class="field full" id="histTitulo" placeholder="Título da página" />
-                        <input class="field full" id="histSubtitulo" placeholder="Subtítulo" />
-                        <div class="foto-upload" onclick="document.getElementById('histFotoInput').click()" style="grid-column:1/-1;">
-                            <img id="histFotoPreview" src="src/imagens/avatar-padrao.jpg" alt="Imagem de capa da História" />
-                            <span class="label"><i class="fas fa-image"></i> Clique para enviar imagem de capa</span>
-                            <input type="file" id="histFotoInput" accept="image/*" />
+                        <div class="form-group full">
+                            <label for="histTitulo"><i class="fas fa-heading"></i> Título da Página</label>
+                            <input class="field full" id="histTitulo" placeholder="Ex: Nossa História" />
                         </div>
-                        <textarea class="field full" id="histTextoExtra" placeholder="Texto adicional (pode conter HTML, imagens, etc.)" rows="6"></textarea>
-                        <textarea class="field full" id="histFundacao" placeholder="Fundação" rows="3"></textarea>
-                        <textarea class="field full" id="histMissao" placeholder="Missão" rows="3"></textarea>
-                        <input class="field full" id="histValores" placeholder="Valores (separados por vírgula)" />
-                        <textarea class="field full" id="histTimeline" placeholder="Linha do tempo (ANO|DESCRIÇÃO, uma por linha)" rows="5"></textarea>
-                        <textarea class="field full" id="histNumeros" placeholder="Números (NÚMERO|RÓTULO, uma por linha)" rows="4"></textarea>
+                        <div class="form-group full">
+                            <label for="histSubtitulo"><i class="fas fa-align-left"></i> Subtítulo</label>
+                            <input class="field full" id="histSubtitulo" placeholder="Ex: Conheça a trajetória da ASSGA, desde sua fundação até os dias atuais." />
+                        </div>
+                        
+                        <!-- DATA DE DESTAQUE -->
+                        <div class="form-group full">
+                            <label for="histData"><i class="fas fa-calendar-alt"></i> Data de Destaque / Fundação</label>
+                            <input class="field full" id="histData" placeholder="Ex: Fundada em 2019 ou 15 de Março de 2019" />
+                        </div>
+
+                        <!-- FOTO PRINCIPAL / IMAGEM DE CAPA -->
+                        <div class="form-group full">
+                            <label><i class="fas fa-image"></i> Foto Principal / Imagem de Capa</label>
+                            <div class="foto-upload" onclick="document.getElementById('histFotoInput').click()">
+                                <img id="histFotoPreview" src="src/imagens/avatar-padrao.jpg" alt="Imagem de capa da História" />
+                                <span class="label"><i class="fas fa-camera"></i> Clique para enviar ou alterar a foto</span>
+                                <input type="file" id="histFotoInput" accept="image/*" />
+                            </div>
+                            <div style="text-align:center; margin-top:8px;">
+                                <button type="button" class="btn btn-outline btn-sm" onclick="removerHistFoto(event)">
+                                    <i class="fas fa-trash-alt"></i> Remover foto de capa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TEXTO PRINCIPAL DA HISTÓRIA -->
+                        <div class="form-group full">
+                            <label for="histTextoExtra"><i class="fas fa-paragraph"></i> Texto da História (Relato / Descrição)</label>
+                            <textarea class="field full" id="histTextoExtra" placeholder="Digite o relato histórico da ASSGA..." rows="5"></textarea>
+                        </div>
+
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary-action"><i class="fas fa-save"></i> Salvar História</button>
+                            <a href="historia.html" target="_blank" class="btn btn-secondary">
+                                <i class="fas fa-eye"></i> Visualizar História
+                            </a>
+                            <button type="submit" class="btn btn-primary-action">
+                                <i class="fas fa-save"></i> Salvar Conteúdo da História
+                            </button>
                         </div>
                     </div>
                 </form>
                 <p id="msgHist" style="margin-top:10px; color:#28a745; font-weight:600;"></p>
+            </div>
+
+            <!-- GERENCIADOR DE MOMENTOS E REGISTROS HISTÓRICOS (FOTO, TEXTO E DATA) -->
+            <div class="content-card" style="margin-top:25px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+                    <div>
+                        <h2><i class="fas fa-camera-retro"></i> Momentos e Registros Históricos</h2>
+                        <p style="color:#666; margin:4px 0 0; font-size:0.95rem;">Adicione fotos históricas com data e texto explicativo para compor os marcos da trajetória da ASSGA.</p>
+                    </div>
+                    <button type="button" class="btn-amarelo" onclick="mostrarFormularioMomentoHistoria()">
+                        <i class="fas fa-plus"></i> Adicionar Registro (Foto, Texto e Data)
+                    </button>
+                </div>
+
+                <!-- Formulário de Momento Histórico -->
+                <div class="form-card" id="formMomentoHistoria">
+                    <h3 style="color:#003366; margin-bottom:16px;">
+                        <i class="fas fa-camera"></i> <span id="momentoFormTitle">Novo Momento Histórico</span>
+                    </h3>
+                    <form id="momentoHistoriaForm">
+                        <input type="hidden" id="editMomentoIndex" value="-1" />
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label for="momentoTitulo"><i class="fas fa-heading"></i> Título do Momento</label>
+                                <input class="field full" type="text" id="momentoTitulo" placeholder="Ex: Primeiro Campeonato Regional, Fundação da Sede..." />
+                            </div>
+                            <div class="form-group full">
+                                <label for="momentoData"><i class="fas fa-calendar-alt"></i> Data <span class="required-asterisk">*</span></label>
+                                <input class="field full" type="text" id="momentoData" placeholder="Ex: 15/08/2019, 2020 ou Outubro de 2024" required />
+                            </div>
+                            <div class="form-group full">
+                                <label for="momentoTexto"><i class="fas fa-paragraph"></i> Texto / Relato Histórico <span class="required-asterisk">*</span></label>
+                                <textarea class="field full" id="momentoTexto" rows="3" placeholder="Descreva o marco, história, acontecimento ou conquista..." required></textarea>
+                            </div>
+                            
+                            <!-- Foto do Momento -->
+                            <div class="form-group full">
+                                <label><i class="fas fa-image"></i> Foto do Momento <span class="required-asterisk">*</span></label>
+                                <div class="foto-upload" onclick="document.getElementById('momentoFotoInput').click()">
+                                    <img id="momentoFotoPreview" src="src/imagens/avatar-padrao.jpg" alt="Foto do momento" />
+                                    <span class="label"><i class="fas fa-camera"></i> Clique para escolher a Foto do Momento <span class="required-asterisk">*</span></span>
+                                    <input type="file" id="momentoFotoInput" accept="image/*" />
+                                </div>
+                                <div style="text-align:center; margin-top:6px;">
+                                    <button type="button" class="btn btn-outline btn-sm" onclick="removerMomentoFoto(event)">
+                                        <i class="fas fa-trash-alt"></i> Limpar foto
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline" onclick="fecharFormularioMomentoHistoria()">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary-action">
+                                    <i class="fas fa-save"></i> Salvar Momento Histórico
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Lista de Momentos Históricos -->
+                <div id="listaMomentosHistoria" class="item-list" style="margin-top:20px;"></div>
             </div>
         </div>
 
@@ -587,7 +680,8 @@
         slider: 'assga_slider',
         config: 'assga_config',
         index: 'assga_conteudos',
-        esportivas: 'assga_esportivas'
+        esportivas: 'assga_esportivas',
+        historias: 'assga_historias'
     };
     const MAX_ESPORTIVAS = 5;
 
@@ -631,7 +725,7 @@
         return escapeHtml(text);
     }
     function isRealImage(url) {
-        return url && url.startsWith('data:image');
+        return url && (url.startsWith('data:image') || url.startsWith('src/') || url.startsWith('http') || url.startsWith('/'));
     }
 
     // ==========================================================
@@ -998,8 +1092,35 @@
     }
 
     // ==========================================================
-    // HISTÓRIA - CORRIGIDA E FUNCIONAL
+    // HISTÓRIA - FOTO, TEXTO, DATA E MARCOS HISTÓRICOS
     // ==========================================================
+    const defaultMomentosHistoria = [
+        {
+            titulo: "Fundação da ASSGA",
+            data: "2019",
+            texto: "Início das atividades da Associação Desportiva ASSGA em São Gonçalo do Amarante - RN, unindo atletas, apoiadores e a comunidade.",
+            imagem: "src/imagens/Assga_foto.jpg"
+        },
+        {
+            titulo: "Primeiros Torneios e Campeonatos",
+            data: "2020 - 2021",
+            texto: "Realização dos primeiros campeonatos com grande participação e entusiasmo da comunidade desportiva.",
+            imagem: "src/imagens/foto1.jpg"
+        },
+        {
+            titulo: "Expansão e Conquistas Esportivas",
+            data: "2022 - 2024",
+            texto: "Crescimento contínuo, integração social e expansão de modalidades esportivas com destaque regional.",
+            imagem: "src/imagens/foto2.jpg"
+        },
+        {
+            titulo: "Presença Digital e Eventos Especiais",
+            data: "2026",
+            texto: "Consolidação da presença digital, carteirinhas de sócios e realizações como o 2º Halloween ASSGA.",
+            imagem: "src/imagens/foto3.jpg"
+        }
+    ];
+
     document.getElementById('histFotoInput').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -1020,48 +1141,203 @@
         img.src = isRealImage(url) ? url : 'src/imagens/avatar-padrao.jpg';
     }
 
+    function removerHistFoto(e) {
+        if (e) e.stopPropagation();
+        setHistFotoPreview('');
+        const input = document.getElementById('histFotoInput');
+        if (input) input.value = '';
+    }
+
+    // Momento Foto
+    document.getElementById('momentoFotoInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            document.getElementById('momentoFotoPreview').src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function getMomentoFotoBase64() {
+        const img = document.getElementById('momentoFotoPreview');
+        return isRealImage(img.src) ? img.src : '';
+    }
+
+    function setMomentoFotoPreview(url) {
+        const img = document.getElementById('momentoFotoPreview');
+        img.src = isRealImage(url) ? url : 'src/imagens/avatar-padrao.jpg';
+    }
+
+    function removerMomentoFoto(e) {
+        if (e) e.stopPropagation();
+        setMomentoFotoPreview('');
+        const input = document.getElementById('momentoFotoInput');
+        if (input) input.value = '';
+    }
+
+    function getMomentosHistoria() {
+        const conteudos = getObject(STORAGE_KEYS.historia);
+        if (conteudos.historia && Array.isArray(conteudos.historia.itens) && conteudos.historia.itens.length > 0) {
+            return conteudos.historia.itens;
+        }
+        const legacy = getData(STORAGE_KEYS.historias || 'assga_historias');
+        if (legacy && legacy.length > 0) return legacy;
+        return [...defaultMomentosHistoria];
+    }
+
+    function setMomentosHistoria(lista) {
+        const conteudos = getObject(STORAGE_KEYS.historia);
+        if (!conteudos.historia) conteudos.historia = {};
+        conteudos.historia.itens = lista;
+        setObject(STORAGE_KEYS.historia, conteudos);
+        setData(STORAGE_KEYS.historias || 'assga_historias', lista);
+    }
+
+    function renderMomentosHistoria() {
+        const container = document.getElementById('listaMomentosHistoria');
+        if (!container) return;
+        const lista = getMomentosHistoria();
+        if (lista.length === 0) {
+            container.innerHTML = '<div class="empty-msg"><i class="fas fa-camera"></i> Nenhum momento histórico cadastrado ainda. Clique em "Adicionar Registro" acima.</div>';
+            return;
+        }
+        container.innerHTML = lista.map((m, i) => `
+            <div class="item-row">
+                <div class="info" style="align-items:flex-start;">
+                    <img src="${isRealImage(m.imagem) ? m.imagem : 'src/imagens/avatar-padrao.jpg'}" alt="Foto do momento" style="width:70px; height:70px; border-radius:10px;" />
+                    <div style="flex:1;">
+                        <strong style="font-size:1.05rem;">${escapeHtml(m.titulo || 'Momento Histórico')}</strong>
+                        <div style="margin:4px 0;">
+                            <span class="badge" style="background:#003366; color:#ffd700; font-size:0.8rem; padding:3px 10px;">
+                                <i class="fas fa-calendar-alt"></i> ${escapeHtml(m.data || 'Sem data')}
+                            </span>
+                        </div>
+                        <p style="margin:6px 0 0; color:#555; font-size:0.9rem; line-height:1.5;">${escapeHtml(m.texto || '')}</p>
+                    </div>
+                </div>
+                <div class="item-actions" style="margin-top:8px;">
+                    <button class="btn btn-warning btn-sm" onclick="editarMomentoHistoria(${i})"><i class="fas fa-edit"></i> Editar</button>
+                    <button class="btn btn-danger btn-sm" onclick="excluirMomentoHistoria(${i})"><i class="fas fa-trash"></i> Excluir</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function mostrarFormularioMomentoHistoria(editIndex = -1) {
+        const card = document.getElementById('formMomentoHistoria');
+        card.classList.add('visible');
+        document.getElementById('editMomentoIndex').value = editIndex;
+        document.getElementById('momentoFormTitle').textContent = editIndex === -1 ? 'Novo Momento Histórico (Foto, Texto e Data)' : 'Editar Momento Histórico';
+        if (editIndex === -1) {
+            document.getElementById('momentoHistoriaForm').reset();
+            setMomentoFotoPreview('');
+        } else {
+            const lista = getMomentosHistoria();
+            const item = lista[editIndex];
+            if (item) {
+                document.getElementById('momentoTitulo').value = item.titulo || '';
+                document.getElementById('momentoData').value = item.data || '';
+                document.getElementById('momentoTexto').value = item.texto || '';
+                setMomentoFotoPreview(item.imagem || '');
+            }
+        }
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function fecharFormularioMomentoHistoria() {
+        document.getElementById('formMomentoHistoria').classList.remove('visible');
+    }
+
+    document.getElementById('momentoHistoriaForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const index = parseInt(document.getElementById('editMomentoIndex').value);
+        const data = document.getElementById('momentoData').value.trim();
+        const texto = document.getElementById('momentoTexto').value.trim();
+        const imagem = getMomentoFotoBase64();
+
+        if (!data) { alert('Informe a data do momento.'); return; }
+        if (!texto) { alert('Informe o texto do momento.'); return; }
+        if (!imagem) { alert('Por favor, selecione uma foto para este momento.'); return; }
+
+        const novo = {
+            titulo: document.getElementById('momentoTitulo').value.trim(),
+            data: data,
+            texto: texto,
+            imagem: imagem
+        };
+
+        let lista = getMomentosHistoria();
+        if (index === -1) {
+            lista.unshift(novo);
+        } else {
+            lista[index] = novo;
+        }
+
+        setMomentosHistoria(lista);
+        renderMomentosHistoria();
+        fecharFormularioMomentoHistoria();
+        showMessage('msgHist', '✅ Momento histórico salvo com sucesso!');
+    });
+
+    function editarMomentoHistoria(index) {
+        mostrarFormularioMomentoHistoria(index);
+    }
+
+    function excluirMomentoHistoria(index) {
+        if (!confirm('Deseja excluir este momento histórico?')) return;
+        let lista = getMomentosHistoria();
+        lista.splice(index, 1);
+        setMomentosHistoria(lista);
+        renderMomentosHistoria();
+        showMessage('msgHist', '🗑️ Momento histórico excluído.');
+    }
+
     function carregarHistoria() {
-        const data = getObject(STORAGE_KEYS.historia).historia || {};
-        document.getElementById('histTitulo').value = data.titulo || '';
-        document.getElementById('histSubtitulo').value = data.subtitulo || '';
-        document.getElementById('histTextoExtra').value = data.textoExtra || '';
-        document.getElementById('histFundacao').value = data.fundacao || '';
-        document.getElementById('histMissao').value = data.missao || '';
-        document.getElementById('histValores').value = (data.valores || []).join(', ');
-        document.getElementById('histTimeline').value = (data.timeline || []).map(item => `${item.ano}|${item.descricao}`).join('\n');
-        document.getElementById('histNumeros').value = (data.numeros || []).map(item => `${item.numero}|${item.label}`).join('\n');
-        setHistFotoPreview(data.imagem || '');
+        const conteudos = getObject(STORAGE_KEYS.historia);
+        const data = conteudos.historia || {};
+        // Limpar chaves antigas se presentes no storage
+        delete data.fundacao;
+        delete data.missao;
+        delete data.valores;
+        delete data.timeline;
+        delete data.numeros;
+        if (conteudos.historia) {
+            conteudos.historia = data;
+            setObject(STORAGE_KEYS.historia, conteudos);
+        }
+
+        document.getElementById('histTitulo').value = data.titulo || 'Nossa História';
+        document.getElementById('histSubtitulo').value = data.subtitulo || 'Conheça a trajetória da ASSGA, desde sua fundação até os dias atuais.';
+        document.getElementById('histData').value = data.data || 'Fundada em 2019';
+        document.getElementById('histTextoExtra').value = data.textoExtra || data.texto || '';
+        setHistFotoPreview(data.imagem || 'src/imagens/Assga_foto.jpg');
+        renderMomentosHistoria();
     }
 
     document.getElementById('historiaForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const timeline = document.getElementById('histTimeline').value.split('\n')
-            .filter(line => line.trim() !== '')
-            .map(line => {
-                const parts = line.split('|').map(s => s.trim());
-                return { ano: parts[0] || '', descricao: parts[1] || '' };
-            });
-        const numeros = document.getElementById('histNumeros').value.split('\n')
-            .filter(line => line.trim() !== '')
-            .map(line => {
-                const parts = line.split('|').map(s => s.trim());
-                return { numero: parts[0] || '', label: parts[1] || '' };
-            });
-        const valores = document.getElementById('histValores').value.split(',').map(s => s.trim()).filter(s => s);
         const conteudos = getObject(STORAGE_KEYS.historia);
+        const momentosAtuais = getMomentosHistoria();
+        
         conteudos.historia = {
-            titulo: document.getElementById('histTitulo').value.trim(),
+            titulo: document.getElementById('histTitulo').value.trim() || 'Nossa História',
             subtitulo: document.getElementById('histSubtitulo').value.trim(),
+            data: document.getElementById('histData').value.trim() || 'Fundada em 2019',
             textoExtra: document.getElementById('histTextoExtra').value.trim(),
-            fundacao: document.getElementById('histFundacao').value.trim(),
-            missao: document.getElementById('histMissao').value.trim(),
-            valores: valores,
-            timeline: timeline,
-            numeros: numeros,
-            imagem: getHistFotoBase64()
+            texto: document.getElementById('histTextoExtra').value.trim(),
+            imagem: getHistFotoBase64() || (conteudos.historia?.imagem || 'src/imagens/Assga_foto.jpg'),
+            itens: momentosAtuais
         };
         setObject(STORAGE_KEYS.historia, conteudos);
         showMessage('msgHist', '✅ História salva com sucesso!');
+
+        // Tentar salvar na API se disponível
+        fetch('?api=salvar_historia', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(conteudos.historia)
+        }).catch(() => {});
     });
 
     // ==========================================================
