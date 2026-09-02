@@ -1,0 +1,8 @@
+{
+  "name": "ASSGA - Associação Desportiva",
+  "description": "ASSGA - Associação Desportiva. Esporte, integração, eventos e participação social.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
